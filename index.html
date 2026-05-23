@@ -1018,10 +1018,41 @@ function updateGoal() {
   GOAL = val;
   state.goal = GOAL;
   state.updatedAt = Date.now();
+
+  // Recalcule les positions du joueur proportionnellement au nouvel objectif
+  PLAYER_POSITIONS[1].at = Math.round(GOAL * 0.14);
+  PLAYER_POSITIONS[2].at = Math.round(GOAL * 0.29);
+  PLAYER_POSITIONS[3].at = Math.round(GOAL * 0.57);
+  PLAYER_POSITIONS[4].at = Math.round(GOAL * 0.80);
+  PLAYER_POSITIONS[5].at = GOAL;
+
+  // Recalcule les paliers proportionnellement
+  MILESTONES[0].contracts = Math.round(GOAL * 0.14);
+  MILESTONES[1].contracts = Math.round(GOAL * 0.29);
+  MILESTONES[2].contracts = Math.round(GOAL * 0.57);
+  MILESTONES[3].contracts = Math.round(GOAL * 0.80);
+  MILESTONES[4].contracts = GOAL;
+
+  // Met à jour les labels des paliers dans le DOM
+  document.getElementById("ms-5").id = "ms-" + MILESTONES[0].contracts;
+  document.getElementById("ms-10").id = "ms-" + MILESTONES[1].contracts;
+  document.getElementById("ms-20").id = "ms-" + MILESTONES[2].contracts;
+  document.getElementById("ms-28").id = "ms-" + MILESTONES[3].contracts;
+  document.getElementById("ms-" + GOAL) && (document.getElementById("ms-" + GOAL).id = "ms-" + MILESTONES[4].contracts);
+
+  // Met à jour les chiffres affichés sur les bulles
+  const msEls = document.querySelectorAll(".milestone-label");
+  msEls[0].textContent = MILESTONES[0].contracts;
+  msEls[1].textContent = MILESTONES[1].contracts;
+  msEls[2].textContent = MILESTONES[2].contracts;
+  msEls[3].textContent = MILESTONES[3].contracts;
+  msEls[4].textContent = "OBJECTIF !";
+
   render();
   renderAdmin();
   pushState();
   showToast("🎯 Objectif mis à jour : " + GOAL);
+  closeAdmin();
 }
 
 function renderAdmin() {
